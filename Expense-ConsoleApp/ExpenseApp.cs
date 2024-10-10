@@ -8,5 +8,6 @@ namespace Expense_ConsoleApp
 {
     internal class ExpenseApp
     {
+        
     }
 }

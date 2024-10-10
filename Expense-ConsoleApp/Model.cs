@@ -9,7 +9,7 @@ namespace Expense_ConsoleApp
     public class Model
     {
         private static int countId = 0;
-        public Model(string name, double amount, Category category, DateTime? date = null)
+        public Model(string name,  Category category, double amount, DateTime? date = null)
         {
             if (string.IsNullOrWhiteSpace(name))
             {
@@ -19,8 +19,8 @@ namespace Expense_ConsoleApp
             countId++;
             Id = countId;
             expenseName = name;
-            Amount = amount;
             expenseCategory = category;
+            Amount = amount;
             Date = date ?? DateTime.Now;
         }
 

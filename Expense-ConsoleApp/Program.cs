@@ -1,2 +1,6 @@
 ﻿// See https://aka.ms/new-console-template for more information
-Console.WriteLine("Hello, World!");
+using Expense_ConsoleApp;
+
+
+var app = new Manage();
+app.DisplayExpenseList();
