@@ -45,7 +45,7 @@ namespace Expense_ConsoleApp
             Console.WriteLine($"{"ID", -3} {"Daftar Kategori"}");
             foreach (var categoryItems in Enum.GetValues(typeof(Model.Category)))
             {
-                Console.WriteLine($"{(int)categoryItems + 1, -3} {categoryItems}");
+                Console.WriteLine($"{(int)categoryItems, -3} {categoryItems}");
             }
 
             Console.Write("\nKetik Id Kategori: ");
@@ -54,7 +54,7 @@ namespace Expense_ConsoleApp
                 Console.WriteLine("Id atau Kategori tersebut tidak terdaftar.");
             }
 
-            Model.Category selectedCategory = (Model.Category)category - 1;
+            Model.Category selectedCategory = (Model.Category)category;
             //Console.WriteLine(selectedCategory);
 
             Console.Write("Jumlah Pengeluaran: ");
