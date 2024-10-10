@@ -9,16 +9,12 @@ namespace Expense_ConsoleApp
     public class Model
     {
         private static int countId = 0;
-        public Model(string name,  Category category, double amount, DateTime? date = null)
+        public Model(string notes,  Category category, double amount, DateTime? date = null)
         {
-            if (string.IsNullOrWhiteSpace(name))
-            {
-                throw new ArgumentException("Nama Pengeluaran tidak boleh Kosong", nameof(name));
-            }
 
             countId++;
             Id = countId;
-            expenseName = name;
+            expenseNotes = string.IsNullOrEmpty(notes) ? "-" : notes;
             expenseCategory = category;
             Amount = amount;
             Date = date ?? DateTime.Now;
@@ -28,14 +24,14 @@ namespace Expense_ConsoleApp
         {
             FoodBeverage,
             Transport,
-            Bill,
+            Bills,
             Fun,
             Shopping,
             Education
         }
 
         public int Id { get; private set; }
-        public string expenseName { get; set; }
+        public string expenseNotes { get; set; }
         public double Amount { get; set; }
         public DateTime Date { get; set; }
         public Category expenseCategory { get; set; }
