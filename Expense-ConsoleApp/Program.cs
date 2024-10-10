@@ -3,4 +3,4 @@ using Expense_ConsoleApp;
 
 
 var app = new Manage();
-app.DisplayExpenseList();
+app.AddExpense();

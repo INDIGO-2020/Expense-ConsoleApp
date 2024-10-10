@@ -36,6 +36,24 @@ namespace Expense_ConsoleApp
         //TODO Add Expense
         public void AddExpense()
         {
+            string catatan;
+            double jumlah;
+            int category;
+
+            Console.WriteLine("Pilih Kategori Pengeluaran: ");
+            foreach (var categoryItems in Enum.GetValues(typeof(Model.Category)))
+            {
+                Console.WriteLine($"{(int)categoryItems + 1}. {categoryItems}");
+            }
+
+            Console.Write("\nMasukkan Id Kategori: ");
+            while (!int.TryParse(Console.ReadLine(), out category) || !Enum.IsDefined(typeof(Model.Category), category))
+            {
+                Console.WriteLine("Id atau Kategori tersebut tidak terdaftar.");
+            }
+
+            Model.Category selectedCategory = (Model.Category)category - 1;
+            Console.WriteLine(selectedCategory);
 
         }
 
