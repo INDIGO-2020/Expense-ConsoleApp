@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Globalization;
 
 namespace Expense_ConsoleApp
 {
@@ -36,6 +31,13 @@ namespace Expense_ConsoleApp
 
         }
 
+        #region TODO
+        //TODO Add Expense
+        public void AddExpense()
+        {
+
+        }
+
         //TODO Display Expenses
         public void DisplayExpenseList()
         {
@@ -44,10 +46,11 @@ namespace Expense_ConsoleApp
             Console.WriteLine(new string('-', 80));
             foreach (var item in modelExpense)
             {
-
+                //call re-format currency
                 string callFormattedCurrency = formatCurrency(item.Amount);
                 Console.WriteLine($"{item.Id,-5} {item.expenseName,-25} {item.expenseCategory,-20} {callFormattedCurrency,-12} {item.Date.ToString("dd/MM/yyy"),-15}");
             }
         }
+        #endregion
     }
 }
