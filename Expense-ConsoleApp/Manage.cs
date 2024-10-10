@@ -6,7 +6,18 @@ using System.Threading.Tasks;
 
 namespace Expense_ConsoleApp
 {
-    internal class Manage
+    public class Manage
     {
+        private List<Model> modelExpense;
+
+        public Manage()
+        {
+
+        }
+
+        private List<Model> expenseList()
+        {
+            new Model()
+        }
     }
 }
