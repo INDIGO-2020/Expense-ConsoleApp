@@ -15,10 +15,11 @@ namespace Expense_ConsoleApp
         {
             return new List<Model>()
             {
+                new Model("", Model.Category.Bills, 12000, DateTime.Now.AddDays(-10)),
                 new Model("Makan Sate", Model.Category.FoodBeverage, 25000, DateTime.Now.AddDays(-5)),
                 new Model("Makan Bakso", Model.Category.FoodBeverage, 50000, DateTime.Now.AddDays(-5)),
                 new Model("Beli Boneka", Model.Category.Fun, 150000, DateTime.Now.AddDays(-3)),
-                new Model("Beli Tissue Magic", Model.Category.Fun, 7000, DateTime.Now)
+                new Model("Beli Tissue Magic", Model.Category.Fun, 7000, DateTime.Now),
             };
 
         }
@@ -48,7 +49,7 @@ namespace Expense_ConsoleApp
             {
                 //call re-format currency
                 string callFormattedCurrency = formatCurrency(item.Amount);
-                Console.WriteLine($"{item.Id,-5} {item.expenseName,-25} {item.expenseCategory,-20} {callFormattedCurrency,-12} {item.Date.ToString("dd/MM/yyy"),-15}");
+                Console.WriteLine($"{item.Id,-5} {item.expenseNotes,-25} {item.expenseCategory,-20} {callFormattedCurrency,-12} {item.Date.ToString("dd/MM/yyy"),-15}");
             }
         }
         #endregion
