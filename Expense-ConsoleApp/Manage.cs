@@ -39,22 +39,35 @@ namespace Expense_ConsoleApp
             string catatan;
             double jumlah;
             int category;
+            DateTime date = DateTime.Now;
 
             Console.WriteLine("Pilih Kategori Pengeluaran: ");
+            Console.WriteLine($"{"ID", -3} {"Daftar Kategori"}");
             foreach (var categoryItems in Enum.GetValues(typeof(Model.Category)))
             {
-                Console.WriteLine($"{(int)categoryItems + 1}. {categoryItems}");
+                Console.WriteLine($"{(int)categoryItems + 1, -3} {categoryItems}");
             }
 
-            Console.Write("\nMasukkan Id Kategori: ");
+            Console.Write("\nKetik Id Kategori: ");
             while (!int.TryParse(Console.ReadLine(), out category) || !Enum.IsDefined(typeof(Model.Category), category))
             {
                 Console.WriteLine("Id atau Kategori tersebut tidak terdaftar.");
             }
 
             Model.Category selectedCategory = (Model.Category)category - 1;
-            Console.WriteLine(selectedCategory);
+            //Console.WriteLine(selectedCategory);
 
+            Console.Write("Jumlah Pengeluaran: ");
+            while(!double.TryParse(Console.ReadLine(), out jumlah))
+            {
+                Console.WriteLine("Input Invalid. Hanya menerima Angka/Number");
+            }
+
+            Console.Write("Catatan tambahan(opsional): ");
+            catatan = Console.ReadLine();
+
+            var expenseBaru = new Model(catatan, selectedCategory, jumlah, date);
+            modelExpense.Add(expenseBaru);
         }
 
         //TODO Display Expenses
