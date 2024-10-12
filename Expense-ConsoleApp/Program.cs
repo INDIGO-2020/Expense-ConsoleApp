@@ -3,6 +3,8 @@ using Expense_ConsoleApp;
 
 
 var app = new Manage();
-app.AddExpense();
-
 app.DisplayExpenseList();
+Console.WriteLine();
+string inputUser = Console.ReadLine();
+
+app.EditExpense(inputUser);
