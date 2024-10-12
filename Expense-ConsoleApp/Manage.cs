@@ -25,15 +25,38 @@ namespace Expense_ConsoleApp
 
         }
 
+        #region utilitas
         //re-format currency
-        private string formatCurrency(double amount)
+        private string FormatCurrency(double amount)
         {
             CultureInfo cultureInfo = new CultureInfo("id-ID");
             return "Rp " + amount.ToString("#,##0", cultureInfo);
 
         }
 
-        #region TODO
+        private void ShowDatafromInputId(int id)
+        {
+            var checkSpesifikasi = modelExpense.Where(t => t.Id == id).SingleOrDefault();
+
+            if (checkSpesifikasi != null)
+            {
+                //header
+                Console.WriteLine($"{"Deskripsi Pengeluaran",-23} {"Kategori Pengeluaran",-20} {"Pengeluaran",-12} {"Tanggal",-15}");
+                Console.WriteLine(new string('-', 75));
+
+                //call re-format currency
+                string callFormattedCurrency = FormatCurrency(checkSpesifikasi.Amount);
+
+                Console.WriteLine($"{checkSpesifikasi.expenseNotes,-23} {checkSpesifikasi.expenseCategory,-20} {callFormattedCurrency,-12} {checkSpesifikasi.Date.ToString("dd/MM/yyy"),-15}");
+            }
+            else
+            {
+                Console.WriteLine("Data dengan {0} tidak ditemukan", id);
+            }
+
+        }
+        #endregion
+        #region TODO:
         //TODO Add Expense
         public void AddExpense()
         {
@@ -91,11 +114,10 @@ namespace Expense_ConsoleApp
                 {
                     try
                     {
-                        Console.WriteLine("Input berhasil dan sesuai");
+                        ShowDatafromInputId(idExpense);
                     }
                     catch (Exception ex)
                     {
-                        Console.WriteLine("Ini catch error");
                         Console.WriteLine(ex.Message);
                     }
                 }
@@ -119,7 +141,7 @@ namespace Expense_ConsoleApp
             foreach (var item in modelExpense)
             {
                 //call re-format currency
-                string callFormattedCurrency = formatCurrency(item.Amount);
+                string callFormattedCurrency = FormatCurrency(item.Amount);
                 Console.WriteLine($"{item.Id,-5} {item.expenseNotes,-25} {item.expenseCategory,-20} {callFormattedCurrency,-12} {item.Date.ToString("dd/MM/yyy"),-15}");
             }
         }
