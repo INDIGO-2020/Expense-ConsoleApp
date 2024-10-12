@@ -11,6 +11,7 @@ namespace Expense_ConsoleApp
             modelExpense = expenseList();
         }
 
+        //In-Memory ExpenseList
         private List<Model> expenseList()
         {
             return new List<Model>()
@@ -19,7 +20,7 @@ namespace Expense_ConsoleApp
                 new Model("Makan Sate", Model.Category.FoodBeverage, 25000, DateTime.Now.AddDays(-5)),
                 new Model("Makan Bakso", Model.Category.FoodBeverage, 50000, DateTime.Now.AddDays(-5)),
                 new Model("Beli Boneka", Model.Category.Fun, 150000, DateTime.Now.AddDays(-3)),
-                new Model("Beli Tissue Magic", Model.Category.Fun, 7000, DateTime.Now),
+                new Model("Beli Tissue Magic", Model.Category.Fun, 7000, DateTime.Now.AddDays(-1)),
             };
 
         }
@@ -52,6 +53,7 @@ namespace Expense_ConsoleApp
             while (!int.TryParse(Console.ReadLine(), out category) || !Enum.IsDefined(typeof(Model.Category), category))
             {
                 Console.WriteLine("Id atau Kategori tersebut tidak terdaftar.");
+                Console.Write("Ketik Id Kategori: ");
             }
 
             Model.Category selectedCategory = (Model.Category)category;
@@ -61,6 +63,7 @@ namespace Expense_ConsoleApp
             while(!double.TryParse(Console.ReadLine(), out jumlah))
             {
                 Console.WriteLine("Input Invalid. Hanya menerima Angka/Number");
+                Console.Write("Jumlah Pengeluaran: ");
             }
 
             Console.Write("Catatan tambahan(opsional): ");
