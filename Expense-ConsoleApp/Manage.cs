@@ -1,4 +1,5 @@
 ﻿using System.Globalization;
+using static Expense_ConsoleApp.Model;
 
 namespace Expense_ConsoleApp
 {
@@ -128,9 +129,10 @@ namespace Expense_ConsoleApp
                 {
                     Console.Clear();
 
-                    bool jalanindulu = true;
-
-                    while (jalanindulu)
+                    bool onRun= true;
+                    int categoryEdited = 0;
+                    double jumlah = 0;
+                    while (onRun)
                     {
 
                         try
@@ -152,29 +154,73 @@ namespace Expense_ConsoleApp
                                 switch (opsiUser)
                                 {
                                     case 1:
-                                        Console.Write("Masukkan Deskripsi baru: ");
+                                        Console.Write("Masukkan Jumlah Pengeluaran baru: ");
                                         string inputDeskripsi = Console.ReadLine();
 
 
                                         modifyExpense.expenseNotes = string.IsNullOrEmpty(inputDeskripsi) ? "-" : inputDeskripsi;
 
-                                        Console.Write("Data telah diperbaharui");
+                                        Console.Write("Data telah diperbaharui. Tekan Enter untuk refresh");
                                         Console.ReadLine();
+
+                                        Console.Clear();
                                         break;
+
+
                                     case 2:
+                                        ShowDataCategories();
+
+                                        Console.Write("Pilih Id Kategori baru(0-6): ");
+                                        while (!int.TryParse(Console.ReadLine(), out categoryEdited) || !Enum.IsDefined(typeof(Model.Category), categoryEdited))
+                                        {
+                                            Console.WriteLine("Invalid Input atau Id tidak tersedia.");
+                                            Console.Write("Ketik Id Kategori: ");
+                                        }
+
+                                        modifyExpense.expenseCategory = (Model.Category)categoryEdited;
+                                        Console.Write("Data telah diperbaharui. Tekan Enter untuk refresh");
+                                        Console.ReadLine();
+                                        Console.Clear();
                                         break;
+
+
+                                    case 3:
+                                        Console.Write("Masukkan Jumlah Pengeluaran Baru: ");
+                                        while (!double.TryParse(Console.ReadLine(), out jumlah))
+                                        {
+                                            Console.WriteLine("Input Invalid. Hanya menerima Angka/Number");
+                                            Console.Write("Jumlah Pengeluaran: ");
+                                        }
+
+                                        modifyExpense.Amount = jumlah;
+
+                                        Console.Write("Data telah diperbaharui. Tekan Enter untuk refresh");
+                                        Console.ReadLine();
+
+                                        Console.Clear();
+                                        break;
+
+
                                     case 4:
+
                                         break;
                                     case 0:
-                                        jalanindulu = false;
+                                        onRun = false;
                                         break;
                                     default:
+                                        Console.WriteLine("Invalid Input atau Opsi tidak tersedia");
+                                        Console.ReadLine();
+
+                                        Console.Clear();
                                         break;
                                 }
                             }
                             else
                             {
-                                Console.WriteLine("Input Invalid. gunakan angka");
+                                Console.WriteLine("Input Invalid. Gunakan Angka");
+                                Console.ReadLine();
+
+                                Console.Clear();
                             }
                         }
                         catch (Exception ex)
