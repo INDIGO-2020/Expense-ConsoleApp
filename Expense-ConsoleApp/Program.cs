@@ -3,7 +3,7 @@ using Expense_ConsoleApp;
 
 
 var app = new Manage();
-app.DisplayExpenseList();
+app.BriefDisplayExpenses();
 Console.WriteLine();
 string inputUser = Console.ReadLine();
 

@@ -34,28 +34,46 @@ namespace Expense_ConsoleApp
 
         }
 
+        public void BriefDisplayExpenses()
+        {
+
+            Console.WriteLine($"{"No. ", -5} {"Tanggal",-12} {"Kategori Expense",-25} {"Jumlah Pengeluaran"}");
+            Console.WriteLine(new string('-', 58));
+
+            foreach (var briefSum in modelExpense)
+            {
+                string callFormattedCurrency = FormatCurrency(briefSum.Amount);
+
+                Console.WriteLine($"{briefSum.Id, -5} {briefSum.Date.ToString("dd/MM/yyy"),-12} {briefSum.expenseCategory,-25} {callFormattedCurrency} ");
+
+            }
+
+        }
+        private void ShowDataCategories()
+        {
+            Console.WriteLine($"{"ID",-3} {"Daftar Kategori"}");
+            foreach (var categoryItems in Enum.GetValues(typeof(Model.Category)))
+            {
+                Console.WriteLine($"{(int)categoryItems,-3} {categoryItems}");
+            }
+        }
         private void ShowDatafromInputId(int id)
         {
             var checkSpesifikasi = modelExpense.Where(t => t.Id == id).SingleOrDefault();
 
-            if (checkSpesifikasi != null)
-            {
-                //header
-                Console.WriteLine($"{"Deskripsi Pengeluaran",-23} {"Kategori Pengeluaran",-20} {"Pengeluaran",-12} {"Tanggal",-15}");
-                Console.WriteLine(new string('-', 75));
+            //header
+            Console.WriteLine($"{"Deskripsi Pengeluaran",-23} {"Kategori Pengeluaran",-20} {"Pengeluaran",-12} {"Tanggal",-15}");
+            Console.WriteLine(new string('-', 70));
 
-                //call re-format currency
-                string callFormattedCurrency = FormatCurrency(checkSpesifikasi.Amount);
+            //call re-format currency
+            string callFormattedCurrency = FormatCurrency(checkSpesifikasi.Amount);
 
-                Console.WriteLine($"{checkSpesifikasi.expenseNotes,-23} {checkSpesifikasi.expenseCategory,-20} {callFormattedCurrency,-12} {checkSpesifikasi.Date.ToString("dd/MM/yyy"),-15}");
-            }
-            else
-            {
-                Console.WriteLine("Data dengan {0} tidak ditemukan", id);
-            }
+            Console.WriteLine($"{checkSpesifikasi.expenseNotes,-23} {checkSpesifikasi.expenseCategory,-20} {callFormattedCurrency,-12} {checkSpesifikasi.Date.ToString("dd/MM/yyy"),-15}");
+
 
         }
         #endregion
+
         #region TODO:
         //TODO Add Expense
         public void AddExpense()
@@ -66,11 +84,7 @@ namespace Expense_ConsoleApp
             DateTime date = DateTime.Now;
 
             Console.WriteLine("Pilih Kategori Pengeluaran: ");
-            Console.WriteLine($"{"ID",-3} {"Daftar Kategori"}");
-            foreach (var categoryItems in Enum.GetValues(typeof(Model.Category)))
-            {
-                Console.WriteLine($"{(int)categoryItems,-3} {categoryItems}");
-            }
+            ShowDataCategories();
 
             Console.Write("\nKetik Id Kategori: ");
             while (!int.TryParse(Console.ReadLine(), out category) || !Enum.IsDefined(typeof(Model.Category), category))
@@ -97,7 +111,7 @@ namespace Expense_ConsoleApp
         }
 
         //TODO Edit Expense
-        public void EditExpense(string inputId)
+        public void EditExpense(string inputId, int? opsiUser = null)
         {
 
             if (string.IsNullOrWhiteSpace(inputId))
@@ -112,14 +126,64 @@ namespace Expense_ConsoleApp
 
                 if (modifyExpense != null)
                 {
-                    try
+                    Console.Clear();
+
+                    bool jalanindulu = true;
+
+                    while (jalanindulu)
                     {
-                        ShowDatafromInputId(idExpense);
+
+                        try
+                        {
+                            ShowDatafromInputId(idExpense);
+
+
+                            Console.WriteLine("\nPilih opsi: ");
+                            Console.Write("1. Edit Deskripsi Pengeluaran\n" +
+                                "2. Edit Kategori\n" +
+                                "3. Edit Pengeluaran\n" +
+                                "4. Edit Tanggal\n" +
+                                "0. Selesai\n\n");
+
+                            if (int.TryParse(Console.ReadKey(true).KeyChar.ToString(), out int inputUser))
+                            {
+                                opsiUser = inputUser;
+
+                                switch (opsiUser)
+                                {
+                                    case 1:
+                                        Console.Write("Masukkan Deskripsi baru: ");
+                                        string inputDeskripsi = Console.ReadLine();
+
+
+                                        modifyExpense.expenseNotes = string.IsNullOrEmpty(inputDeskripsi) ? "-" : inputDeskripsi;
+
+                                        Console.Write("Data telah diperbaharui");
+                                        Console.ReadLine();
+                                        break;
+                                    case 2:
+                                        break;
+                                    case 4:
+                                        break;
+                                    case 0:
+                                        jalanindulu = false;
+                                        break;
+                                    default:
+                                        break;
+                                }
+                            }
+                            else
+                            {
+                                Console.WriteLine("Input Invalid. gunakan angka");
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            Console.WriteLine(ex.Message);
+                        }
+
                     }
-                    catch (Exception ex)
-                    {
-                        Console.WriteLine(ex.Message);
-                    }
+
                 }
                 else
                 {
@@ -136,13 +200,13 @@ namespace Expense_ConsoleApp
         public void DisplayExpenseList()
         {
             //header
-            Console.WriteLine($"{"ID",-5} {"Deskripsi Pengeluaran",-25} {"Kategori Pengeluaran",-20} {"Pengeluaran",-12} {"Tanggal",-15}");
+            Console.WriteLine($"{"ID",-5} {"Deskripsi Pengeluaran",-25} {"Kategori",-15} {"Pengeluaran",-15} {"Tanggal",-15}");
             Console.WriteLine(new string('-', 80));
             foreach (var item in modelExpense)
             {
                 //call re-format currency
                 string callFormattedCurrency = FormatCurrency(item.Amount);
-                Console.WriteLine($"{item.Id,-5} {item.expenseNotes,-25} {item.expenseCategory,-20} {callFormattedCurrency,-12} {item.Date.ToString("dd/MM/yyy"),-15}");
+                Console.WriteLine($"{item.Id,-5} {item.expenseNotes,-25} {item.expenseCategory,-15} {callFormattedCurrency,-15} {item.Date.ToString("dd/MM/yyy"),-15}");
             }
         }
         #endregion
