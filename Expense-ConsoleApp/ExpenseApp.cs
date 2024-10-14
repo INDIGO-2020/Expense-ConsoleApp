@@ -6,8 +6,17 @@ using System.Threading.Tasks;
 
 namespace Expense_ConsoleApp
 {
-    internal class ExpenseApp
+    public class ExpenseApp
     {
-        
+        private Manage manage;
+        public ExpenseApp()
+        {
+            manage = new Manage();
+        }
+
+        public void Execute()
+        {
+
+        }
     }
 }
