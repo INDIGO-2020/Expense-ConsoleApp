@@ -2,9 +2,5 @@
 using Expense_ConsoleApp;
 
 
-var app = new Manage();
-app.BriefDisplayExpenses();
-Console.WriteLine();
-string inputUser = Console.ReadLine();
-
-app.DeleteExpense(inputUser);
+var app = new ExpenseApp();
+app.Execute();
