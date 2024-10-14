@@ -35,7 +35,7 @@ namespace Expense_ConsoleApp
         }
 
 
-        public void BriefDisplayExpenses()
+        private void BriefDisplayExpenses()
         {
             Console.WriteLine($"{"No. ",-5} {"Tanggal",-12} {"Kategori Expense",-25} {"Jumlah Pengeluaran"}");
             Console.WriteLine(new string('-', 58));
@@ -73,7 +73,25 @@ namespace Expense_ConsoleApp
             Console.WriteLine($"{checkSpesifikasi.expenseNotes,-23} {checkSpesifikasi.expenseCategory,-20} {callFormattedCurrency,-12} {checkSpesifikasi.Date.ToString("dd/MM/yyy"),-15}");
         }
 
+        public void DisplayHeader(string headerText)
+        {
+            int widthConsole = Console.WindowWidth;
+            int textLength = headerText.Length;
+            int totalPadding = (widthConsole - textLength) / 2;
 
+            if (totalPadding > 0)
+            {
+                string padding = new string('=', totalPadding - 1);
+                string longLine = new string('=', widthConsole - 1);
+                Console.WriteLine($"{longLine}");
+                Console.WriteLine($"{padding} {headerText} {padding}");
+                Console.WriteLine();
+            }
+            else
+            {
+                Console.WriteLine(headerText);
+            }
+        }
         #endregion
 
         #region TODO:
@@ -83,33 +101,80 @@ namespace Expense_ConsoleApp
             string catatan;
             double jumlah;
             int category;
+
             DateTime date = DateTime.Now;
-
-            Console.WriteLine("Pilih Kategori Pengeluaran: ");
-            ShowDataCategories();
-
-            Console.Write("\nKetik Id Kategori: ");
-            while (!int.TryParse(Console.ReadLine(), out category) || !Enum.IsDefined(typeof(Model.Category), category))
+            bool onRun = true;
+            string confirmAddingnewData;
+            do
             {
-                Console.WriteLine("Id atau Kategori tersebut tidak terdaftar.");
-                Console.Write("Ketik Id Kategori: ");
-            }
+                Console.WriteLine("Pilih Kategori Pengeluaran: ");
+                ShowDataCategories();
 
-            Model.Category selectedCategory = (Model.Category)category;
-            //Console.WriteLine(selectedCategory);
+                Console.Write("\nKetik Id Kategori: ");
+                while (!int.TryParse(Console.ReadLine(), out category) || !Enum.IsDefined(typeof(Model.Category), category))
+                {
+                    Console.WriteLine("Id atau Kategori tersebut tidak terdaftar.");
+                    Console.Write("Ketik Id Kategori: ");
+                }
 
-            Console.Write("Jumlah Pengeluaran: ");
-            while (!double.TryParse(Console.ReadLine(), out jumlah))
-            {
-                Console.WriteLine("Input Invalid. Hanya menerima Angka/Number");
+                Model.Category selectedCategory = (Model.Category)category;
+                //Console.WriteLine(selectedCategory);
+
                 Console.Write("Jumlah Pengeluaran: ");
-            }
+                while (!double.TryParse(Console.ReadLine(), out jumlah))
+                {
+                    Console.WriteLine("Input Invalid. Hanya menerima Angka/Number");
+                    Console.Write("Jumlah Pengeluaran: ");
+                }
 
-            Console.Write("Catatan tambahan(opsional): ");
-            catatan = Console.ReadLine();
+                Console.Write("Catatan tambahan(opsional): ");
+                catatan = Console.ReadLine();
 
-            var expenseBaru = new Model(catatan, selectedCategory, jumlah, date);
-            modelExpense.Add(expenseBaru);
+                var expenseBaru = new Model(catatan, selectedCategory, jumlah, date);
+                modelExpense.Add(expenseBaru);
+                Console.WriteLine("Data ditambahkan!");
+
+
+                /* confirmasi penambahan data?
+                 * confirm ? return : break; 
+                 */
+
+                Console.Write("Add Data? (Y/N): ");
+                confirmAddingnewData = Console.ReadLine();
+                int countmaxInvalid = 0;
+
+                while (!string.IsNullOrWhiteSpace(confirmAddingnewData) || confirmAddingnewData.ToLower() != "y" || confirmAddingnewData.ToLower() != "n")
+                {
+                    Console.WriteLine("Input Kosong");
+
+                    if (countmaxInvalid >= 3)
+                    {
+                        Console.WriteLine("Kembali Ke Menu Utama");
+                        return;
+                    }
+
+                    if (!string.IsNullOrWhiteSpace(confirmAddingnewData) || confirmAddingnewData.ToLower() != "y" || confirmAddingnewData.ToLower() != "n")
+                    {
+                        Console.Write("Add Data? (Y/N): ");
+                        confirmAddingnewData = Console.ReadLine();
+                    }
+                    else
+                    {
+                        Console.WriteLine("Input Kosong atau Invalid");
+                    }
+
+                    countmaxInvalid++;
+                }
+
+                if (confirmAddingnewData.ToLower() == "y")
+                {
+                    continue;
+                }
+                else if (confirmAddingnewData.ToLower() == "n")
+                {
+                    onRun = false;
+                }
+            } while (onRun);
         }
 
         //TODO Edit Expense
@@ -129,6 +194,7 @@ namespace Expense_ConsoleApp
                 if (modifyExpense != null)
                 {
                     Console.Clear();
+                    DisplayHeader("Expense Management ConsoleApp");
 
                     bool onRun = true;
                     int categoryEdited = 0;
@@ -163,6 +229,8 @@ namespace Expense_ConsoleApp
 
                                         Console.ReadLine();
                                         Console.Clear();
+                                        DisplayHeader("Expense Management ConsoleApp");
+
                                         break;
 
 
@@ -181,6 +249,8 @@ namespace Expense_ConsoleApp
 
                                         Console.ReadLine();
                                         Console.Clear();
+                                        DisplayHeader("Expense Management ConsoleApp");
+
                                         break;
 
 
@@ -198,6 +268,8 @@ namespace Expense_ConsoleApp
 
                                         Console.ReadLine();
                                         Console.Clear();
+                                        DisplayHeader("Expense Management ConsoleApp");
+
                                         break;
 
 
@@ -235,6 +307,8 @@ namespace Expense_ConsoleApp
 
                                         Console.ReadLine();
                                         Console.Clear();
+                                        DisplayHeader("Expense Management ConsoleApp");
+
                                         break;
 
 
@@ -248,6 +322,8 @@ namespace Expense_ConsoleApp
 
                                         Console.ReadLine();
                                         Console.Clear();
+                                        DisplayHeader("Expense Management ConsoleApp");
+
                                         break;
                                 }
                             }
@@ -257,6 +333,8 @@ namespace Expense_ConsoleApp
                                 Console.ReadLine();
 
                                 Console.Clear();
+                                DisplayHeader("Expense Management ConsoleApp");
+
                             }
                         }
                         catch (Exception ex)
@@ -289,6 +367,7 @@ namespace Expense_ConsoleApp
             {
                 var modifyExpense = modelExpense.FirstOrDefault(t => t.Id == deleteId);
                 Console.Clear();
+                DisplayHeader("Expense Management ConsoleApp");
 
                 if (modifyExpense != null)
                 {
@@ -310,6 +389,8 @@ namespace Expense_ConsoleApp
                                 Console.ReadLine();
 
                                 Console.Clear();
+                                DisplayHeader("Expense Management ConsoleApp");
+
                                 BriefDisplayExpenses();
                                 break;
                             }
