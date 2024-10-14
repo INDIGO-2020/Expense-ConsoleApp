@@ -160,7 +160,7 @@ namespace Expense_ConsoleApp
                                         modifyExpense.expenseNotes = string.IsNullOrEmpty(inputDeskripsi) ? "-" : inputDeskripsi;
 
                                         Console.Write("Data telah diperbaharui. Tekan Enter untuk refresh");
-                                       
+
                                         Console.ReadLine();
                                         Console.Clear();
                                         break;
@@ -178,7 +178,7 @@ namespace Expense_ConsoleApp
 
                                         modifyExpense.expenseCategory = (Model.Category)categoryEdited;
                                         Console.Write("Data telah diperbaharui. Tekan Enter untuk refresh");
-                                        
+
                                         Console.ReadLine();
                                         Console.Clear();
                                         break;
@@ -195,7 +195,7 @@ namespace Expense_ConsoleApp
                                         modifyExpense.Amount = jumlah;
 
                                         Console.Write("Data telah diperbaharui. Tekan Enter untuk refresh");
-                                        
+
                                         Console.ReadLine();
                                         Console.Clear();
                                         break;
@@ -245,7 +245,7 @@ namespace Expense_ConsoleApp
 
                                     default:
                                         Console.WriteLine("Invalid Input atau Opsi tidak tersedia");
-                                        
+
                                         Console.ReadLine();
                                         Console.Clear();
                                         break;
@@ -276,11 +276,66 @@ namespace Expense_ConsoleApp
             }
         }
 
-        public void DeleteExpense(int inputId)
+        public void DeleteExpense(string inputUser)
         {
-            var modifyExpense = modelExpense.FirstOrDefault(t => t.Id == inputId);
 
-        } 
+            if (string.IsNullOrEmpty(inputUser))
+            {
+                Console.WriteLine("Input tidak boleh Kosong!");
+                return;
+            }
+
+            if (int.TryParse(inputUser, out int deleteId))
+            {
+                var modifyExpense = modelExpense.FirstOrDefault(t => t.Id == deleteId);
+                Console.Clear();
+
+                if (modifyExpense != null)
+                {
+                    bool onRun = true;
+
+                    while (onRun)
+                    {
+                        try
+                        {
+                            ShowDatafromInputId(deleteId);
+
+                            Console.Write("Hapus Data? (Y/N): ");
+                            string confirm = Console.ReadLine();
+
+                            if (confirm.ToLower() == "y")
+                            {
+                                modelExpense.Remove(modifyExpense);
+                                Console.WriteLine("Data berhasil dihapus. Tekan Enter untuk refresh");
+
+                                BriefDisplayExpenses();
+                                break;
+                            }
+                            else if (confirm.ToLower() == "n")
+                            {
+                                return;
+                            }
+                            else
+                            {
+                                Console.WriteLine("Input Invalid. ketik Y/N untuk konfirmasi");
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            Console.WriteLine(ex.Message);
+                        }
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("Invalid Input atau Id tidak ditemukan");
+                }
+            }
+            else
+            {
+                Console.WriteLine("Input invalid. Tidak sesuai ketentuan! Gunakan angka");
+            }
+        }
         //TODO Display Expenses
         public void DisplayExpenseList()
         {

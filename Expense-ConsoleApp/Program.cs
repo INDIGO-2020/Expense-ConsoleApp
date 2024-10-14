@@ -7,4 +7,4 @@ app.BriefDisplayExpenses();
 Console.WriteLine();
 string inputUser = Console.ReadLine();
 
-app.EditExpense(inputUser);
+app.DeleteExpense(inputUser);
