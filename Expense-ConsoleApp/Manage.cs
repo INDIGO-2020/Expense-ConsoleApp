@@ -307,7 +307,9 @@ namespace Expense_ConsoleApp
                             {
                                 modelExpense.Remove(modifyExpense);
                                 Console.WriteLine("Data berhasil dihapus. Tekan Enter untuk refresh");
+                                Console.ReadLine();
 
+                                Console.Clear();
                                 BriefDisplayExpenses();
                                 break;
                             }
@@ -317,7 +319,8 @@ namespace Expense_ConsoleApp
                             }
                             else
                             {
-                                Console.WriteLine("Input Invalid. ketik Y/N untuk konfirmasi");
+                                Console.Write("Input Invalid. ketik Y/N untuk konfirmasi");
+
                             }
                         }
                         catch (Exception ex)
