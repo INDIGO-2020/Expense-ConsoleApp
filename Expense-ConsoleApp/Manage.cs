@@ -1,5 +1,4 @@
 ﻿using System.Globalization;
-using static Expense_ConsoleApp.Model;
 
 namespace Expense_ConsoleApp
 {
@@ -38,14 +37,14 @@ namespace Expense_ConsoleApp
         public void BriefDisplayExpenses()
         {
 
-            Console.WriteLine($"{"No. ", -5} {"Tanggal",-12} {"Kategori Expense",-25} {"Jumlah Pengeluaran"}");
+            Console.WriteLine($"{"No. ",-5} {"Tanggal",-12} {"Kategori Expense",-25} {"Jumlah Pengeluaran"}");
             Console.WriteLine(new string('-', 58));
 
             foreach (var briefSum in modelExpense)
             {
                 string callFormattedCurrency = FormatCurrency(briefSum.Amount);
 
-                Console.WriteLine($"{briefSum.Id, -5} {briefSum.Date.ToString("dd/MM/yyy"),-12} {briefSum.expenseCategory,-25} {callFormattedCurrency} ");
+                Console.WriteLine($"{briefSum.Id,-5} {briefSum.Date.ToString("dd/MM/yyy"),-12} {briefSum.expenseCategory,-25} {callFormattedCurrency} ");
 
             }
 
@@ -129,7 +128,7 @@ namespace Expense_ConsoleApp
                 {
                     Console.Clear();
 
-                    bool onRun= true;
+                    bool onRun = true;
                     int categoryEdited = 0;
                     double jumlah = 0;
                     while (onRun)
@@ -202,7 +201,43 @@ namespace Expense_ConsoleApp
 
 
                                     case 4:
+                                        Console.WriteLine("format Penulisan Tanggal dd/MM/yyy (contoh: 22/08/1999)");
+                                        Console.WriteLine(new string('-', 25));
+                                        Console.Write("Masukkan Tanggal baru atau Kosongkan untuk Set Tanggal ke Hari ini: ");
+                                        string inputTanggalBaru = Console.ReadLine();
 
+                                        DateTime dateTime;
+
+                                        while (true)
+                                        {
+                                            if (string.IsNullOrEmpty(inputTanggalBaru))
+                                            {
+                                                modifyExpense.Date = DateTime.Now;
+                                                break;
+                                            }
+                                            else if (DateTime.TryParseExact(inputTanggalBaru, "dd/MM/yyyy", null, DateTimeStyles.None, out dateTime))
+                                            {
+                                                modifyExpense.Date = dateTime;
+                                                break;
+
+                                            }
+                                            else
+                                            {
+                                                Console.WriteLine("Format Penulisan salah.");
+                                                Console.Write("Masukkan Tanggal baru: ");
+                                                inputTanggalBaru = Console.ReadLine();
+
+                                            }
+                                        }
+
+
+
+
+                                        Console.Write("Data telah diperbaharui. Tekan Enter untuk refresh");
+
+                                        Console.ReadLine();
+
+                                        Console.Clear();
                                         break;
                                     case 0:
                                         onRun = false;
