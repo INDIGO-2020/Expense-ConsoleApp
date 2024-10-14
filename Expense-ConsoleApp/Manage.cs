@@ -34,9 +34,9 @@ namespace Expense_ConsoleApp
 
         }
 
+
         public void BriefDisplayExpenses()
         {
-
             Console.WriteLine($"{"No. ",-5} {"Tanggal",-12} {"Kategori Expense",-25} {"Jumlah Pengeluaran"}");
             Console.WriteLine(new string('-', 58));
 
@@ -47,8 +47,9 @@ namespace Expense_ConsoleApp
                 Console.WriteLine($"{briefSum.Id,-5} {briefSum.Date.ToString("dd/MM/yyy"),-12} {briefSum.expenseCategory,-25} {callFormattedCurrency} ");
 
             }
-
         }
+
+
         private void ShowDataCategories()
         {
             Console.WriteLine($"{"ID",-3} {"Daftar Kategori"}");
@@ -57,6 +58,7 @@ namespace Expense_ConsoleApp
                 Console.WriteLine($"{(int)categoryItems,-3} {categoryItems}");
             }
         }
+
         private void ShowDatafromInputId(int id)
         {
             var checkSpesifikasi = modelExpense.Where(t => t.Id == id).SingleOrDefault();
@@ -69,9 +71,9 @@ namespace Expense_ConsoleApp
             string callFormattedCurrency = FormatCurrency(checkSpesifikasi.Amount);
 
             Console.WriteLine($"{checkSpesifikasi.expenseNotes,-23} {checkSpesifikasi.expenseCategory,-20} {callFormattedCurrency,-12} {checkSpesifikasi.Date.ToString("dd/MM/yyy"),-15}");
-
-
         }
+
+
         #endregion
 
         #region TODO:
@@ -138,7 +140,6 @@ namespace Expense_ConsoleApp
                         {
                             ShowDatafromInputId(idExpense);
 
-
                             Console.WriteLine("\nPilih opsi: ");
                             Console.Write("1. Edit Deskripsi Pengeluaran\n" +
                                 "2. Edit Kategori\n" +
@@ -156,12 +157,11 @@ namespace Expense_ConsoleApp
                                         Console.Write("Masukkan Jumlah Pengeluaran baru: ");
                                         string inputDeskripsi = Console.ReadLine();
 
-
                                         modifyExpense.expenseNotes = string.IsNullOrEmpty(inputDeskripsi) ? "-" : inputDeskripsi;
 
                                         Console.Write("Data telah diperbaharui. Tekan Enter untuk refresh");
+                                       
                                         Console.ReadLine();
-
                                         Console.Clear();
                                         break;
 
@@ -178,6 +178,7 @@ namespace Expense_ConsoleApp
 
                                         modifyExpense.expenseCategory = (Model.Category)categoryEdited;
                                         Console.Write("Data telah diperbaharui. Tekan Enter untuk refresh");
+                                        
                                         Console.ReadLine();
                                         Console.Clear();
                                         break;
@@ -194,8 +195,8 @@ namespace Expense_ConsoleApp
                                         modifyExpense.Amount = jumlah;
 
                                         Console.Write("Data telah diperbaharui. Tekan Enter untuk refresh");
+                                        
                                         Console.ReadLine();
-
                                         Console.Clear();
                                         break;
 
@@ -230,22 +231,22 @@ namespace Expense_ConsoleApp
                                             }
                                         }
 
-
-
-
                                         Console.Write("Data telah diperbaharui. Tekan Enter untuk refresh");
 
                                         Console.ReadLine();
-
                                         Console.Clear();
                                         break;
+
+
                                     case 0:
                                         onRun = false;
                                         break;
+
+
                                     default:
                                         Console.WriteLine("Invalid Input atau Opsi tidak tersedia");
+                                        
                                         Console.ReadLine();
-
                                         Console.Clear();
                                         break;
                                 }
@@ -262,9 +263,7 @@ namespace Expense_ConsoleApp
                         {
                             Console.WriteLine(ex.Message);
                         }
-
                     }
-
                 }
                 else
                 {
@@ -277,6 +276,11 @@ namespace Expense_ConsoleApp
             }
         }
 
+        public void DeleteExpense(int inputId)
+        {
+            var modifyExpense = modelExpense.FirstOrDefault(t => t.Id == inputId);
+
+        } 
         //TODO Display Expenses
         public void DisplayExpenseList()
         {
