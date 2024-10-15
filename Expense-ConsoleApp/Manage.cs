@@ -5,7 +5,7 @@ namespace Expense_ConsoleApp
     public class Manage
     {
         private List<Model> modelExpense;
-
+        public string headerText = "Expense Management ConsoleApp v 1.0";
         public Manage()
         {
             modelExpense = expenseList();
@@ -35,16 +35,19 @@ namespace Expense_ConsoleApp
         }
 
 
-        private void BriefDisplayExpenses()
+        public void BriefDisplayExpenses()
         {
-            Console.WriteLine($"{"No. ",-5} {"Tanggal",-12} {"Kategori Expense",-25} {"Jumlah Pengeluaran"}");
+            Console.Clear();
+
+            DisplayHeader(headerText);
+            Console.WriteLine($"{"No. ",-5} {"Tanggal",-12} {"Kategori Expense",-20} {"Jumlah Pengeluaran"}");
             Console.WriteLine(new string('-', 58));
 
             foreach (var briefSum in modelExpense)
             {
                 string callFormattedCurrency = FormatCurrency(briefSum.Amount);
 
-                Console.WriteLine($"{briefSum.Id,-5} {briefSum.Date.ToString("dd/MM/yyy"),-12} {briefSum.expenseCategory,-25} {callFormattedCurrency} ");
+                Console.WriteLine($"{briefSum.Id,-5} {briefSum.Date.ToString("dd/MM/yyy"),-12} {briefSum.expenseCategory,-20} {callFormattedCurrency} ");
 
             }
         }
@@ -53,6 +56,7 @@ namespace Expense_ConsoleApp
         private void ShowDataCategories()
         {
             Console.WriteLine($"{"ID",-3} {"Daftar Kategori"}");
+            Console.WriteLine(new string('-', 17));
             foreach (var categoryItems in Enum.GetValues(typeof(Model.Category)))
             {
                 Console.WriteLine($"{(int)categoryItems,-3} {categoryItems}");
@@ -106,6 +110,8 @@ namespace Expense_ConsoleApp
             DateTime date = DateTime.Now;
             bool onRun = true;
             string confirmAddingnewData;
+
+
             do
             {
                 Console.WriteLine("Pilih Kategori Pengeluaran: ");
@@ -137,7 +143,7 @@ namespace Expense_ConsoleApp
 
 
                 /* confirmasi penambahan data?
-                 * confirm ? return : break; 
+                 * confirm ? continue : break; 
                  */
 
                 while (true)
@@ -167,7 +173,7 @@ namespace Expense_ConsoleApp
                     }
 
                     countmaxInvalid++;
-                    if(countmaxInvalid >= 3)
+                    if (countmaxInvalid >= 3)
                     {
                         onRun = false;
 
@@ -186,8 +192,8 @@ namespace Expense_ConsoleApp
             if (string.IsNullOrWhiteSpace(inputId))
             {
                 Console.WriteLine("Input tidak boleh Kosong!");
-                return;
             }
+
 
             if (int.TryParse(inputId, out int idExpense))
             {
@@ -196,7 +202,7 @@ namespace Expense_ConsoleApp
                 if (modifyExpense != null)
                 {
                     Console.Clear();
-                    DisplayHeader("Expense Management ConsoleApp");
+                    DisplayHeader(headerText);
 
                     bool onRun = true;
                     int categoryEdited = 0;
@@ -222,16 +228,25 @@ namespace Expense_ConsoleApp
                                 switch (opsiUser)
                                 {
                                     case 1:
-                                        Console.Write("Masukkan Jumlah Pengeluaran baru: ");
+                                        Console.Write("Masukkan Deskripsi baru: ");
                                         string inputDeskripsi = Console.ReadLine();
 
-                                        modifyExpense.expenseNotes = string.IsNullOrEmpty(inputDeskripsi) ? "-" : inputDeskripsi;
+                                        inputDeskripsi = string.IsNullOrEmpty(inputDeskripsi) ? "-" : inputDeskripsi;
 
-                                        Console.Write("Data telah diperbaharui. Tekan Enter untuk refresh");
+                                        if (inputDeskripsi == modifyExpense.expenseNotes)
+                                        {
+                                            Console.WriteLine("Tidak ada perubahan pada Deskripsi.");
+                                        }
+                                        else
+                                        {
+                                            modifyExpense.expenseNotes = inputDeskripsi;
+                                            Console.Write("Data telah diperbaharui. Tekan Enter untuk refresh");
+                                        }
+
 
                                         Console.ReadLine();
                                         Console.Clear();
-                                        DisplayHeader("Expense Management ConsoleApp");
+                                        DisplayHeader(headerText);
 
                                         break;
 
@@ -246,12 +261,19 @@ namespace Expense_ConsoleApp
                                             Console.Write("Ketik Id Kategori: ");
                                         }
 
-                                        modifyExpense.expenseCategory = (Model.Category)categoryEdited;
-                                        Console.Write("Data telah diperbaharui. Tekan Enter untuk refresh");
+                                        if ((Model.Category)categoryEdited == modifyExpense.expenseCategory)
+                                        {
+                                            Console.WriteLine("Tidak ada perubahan pada Kategori.");
+                                        }
+                                        else
+                                        {
+                                            modifyExpense.expenseCategory = (Model.Category)categoryEdited;
+                                            Console.Write("Data telah diperbaharui. Tekan Enter untuk refresh");
+                                        }
 
                                         Console.ReadLine();
                                         Console.Clear();
-                                        DisplayHeader("Expense Management ConsoleApp");
+                                        DisplayHeader(headerText);
 
                                         break;
 
@@ -264,13 +286,21 @@ namespace Expense_ConsoleApp
                                             Console.Write("Jumlah Pengeluaran: ");
                                         }
 
-                                        modifyExpense.Amount = jumlah;
+                                        if (jumlah == modifyExpense.Amount)
+                                        {
+                                            Console.WriteLine("Tidak ada perubahan pada Jumlah Pengeluaran.");
 
-                                        Console.Write("Data telah diperbaharui. Tekan Enter untuk refresh");
+                                        }
+                                        else
+                                        {
+                                            modifyExpense.Amount = jumlah;
+                                            Console.Write("Data telah diperbaharui. Tekan Enter untuk refresh");
+                                        }
+
 
                                         Console.ReadLine();
                                         Console.Clear();
-                                        DisplayHeader("Expense Management ConsoleApp");
+                                        DisplayHeader(headerText);
 
                                         break;
 
@@ -309,13 +339,14 @@ namespace Expense_ConsoleApp
 
                                         Console.ReadLine();
                                         Console.Clear();
-                                        DisplayHeader("Expense Management ConsoleApp");
+                                        DisplayHeader(headerText);
 
                                         break;
 
 
                                     case 0:
                                         onRun = false;
+                                        Console.Clear();
                                         break;
 
 
@@ -324,7 +355,7 @@ namespace Expense_ConsoleApp
 
                                         Console.ReadLine();
                                         Console.Clear();
-                                        DisplayHeader("Expense Management ConsoleApp");
+                                        DisplayHeader(headerText);
 
                                         break;
                                 }
@@ -335,7 +366,7 @@ namespace Expense_ConsoleApp
                                 Console.ReadLine();
 
                                 Console.Clear();
-                                DisplayHeader("Expense Management ConsoleApp");
+                                DisplayHeader(headerText);
 
                             }
                         }
@@ -369,7 +400,7 @@ namespace Expense_ConsoleApp
             {
                 var modifyExpense = modelExpense.FirstOrDefault(t => t.Id == deleteId);
                 Console.Clear();
-                DisplayHeader("Expense Management ConsoleApp");
+                DisplayHeader(headerText);
 
                 if (modifyExpense != null)
                 {
@@ -391,7 +422,7 @@ namespace Expense_ConsoleApp
                                 Console.ReadLine();
 
                                 Console.Clear();
-                                DisplayHeader("Expense Management ConsoleApp");
+                                DisplayHeader(headerText);
 
                                 BriefDisplayExpenses();
                                 break;

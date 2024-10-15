@@ -24,11 +24,10 @@ namespace Expense_ConsoleApp
         public void Execute()
         {
             int option = 0;
-            string header = "Expense Management ConsoleApp";
-
+            string inputUser = string.Empty;
             do
             {
-                manage.DisplayHeader(header);
+                manage.DisplayHeader(manage.headerText);
 
                 Console.Write("Pilih 1-4: ");
 
@@ -47,6 +46,12 @@ namespace Expense_ConsoleApp
                         Console.Clear();
                         break;
                     case 2:
+                        manage.BriefDisplayExpenses();
+
+                        Console.Write("\nPilih No. yang akan di Edit: ");
+                        inputUser = Console.ReadLine();
+                        manage.EditExpense(inputUser);
+
                         break;
                     case 3:
                         break;

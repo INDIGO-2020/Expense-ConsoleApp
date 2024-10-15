@@ -9,6 +9,7 @@ namespace Expense_ConsoleApp
     public class Model
     {
         private static int countId = 0;
+
         public Model(string notes,  Category category, double amount, DateTime? date = null)
         {
 
@@ -18,6 +19,7 @@ namespace Expense_ConsoleApp
             expenseCategory = category;
             Amount = amount;
             Date = date ?? DateTime.Now;
+
         }
 
         public enum Category
