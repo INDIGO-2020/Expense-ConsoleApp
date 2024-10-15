@@ -101,6 +101,7 @@ namespace Expense_ConsoleApp
             string catatan;
             double jumlah;
             int category;
+            int countmaxInvalid = 0;
 
             DateTime date = DateTime.Now;
             bool onRun = true;
@@ -139,40 +140,41 @@ namespace Expense_ConsoleApp
                  * confirm ? return : break; 
                  */
 
-                Console.Write("Add Data? (Y/N): ");
-                confirmAddingnewData = Console.ReadLine();
-                int countmaxInvalid = 0;
-
-                while (!string.IsNullOrWhiteSpace(confirmAddingnewData) || confirmAddingnewData.ToLower() != "y" || confirmAddingnewData.ToLower() != "n")
+                while (true)
                 {
-                    Console.WriteLine("Input Kosong");
+                    Console.Write("Add Data? (Y/N): ");
+                    confirmAddingnewData = Console.ReadLine();
 
-                    if (countmaxInvalid >= 3)
+                    if (string.IsNullOrWhiteSpace(confirmAddingnewData))
                     {
-                        Console.WriteLine("Kembali Ke Menu Utama");
-                        return;
+                        Console.WriteLine("Input Invalid atau Kosong.");
                     }
-
-                    if (!string.IsNullOrWhiteSpace(confirmAddingnewData) || confirmAddingnewData.ToLower() != "y" || confirmAddingnewData.ToLower() != "n")
+                    else if (confirmAddingnewData.ToLower() == "y")
                     {
-                        Console.Write("Add Data? (Y/N): ");
-                        confirmAddingnewData = Console.ReadLine();
+                        break;
+                    }
+                    else if (confirmAddingnewData.ToLower() == "n")
+                    {
+                        onRun = false;
+
+                        Console.WriteLine("Kembali ke Menu Utama. Tekan Enter");
+                        Console.ReadLine();
+                        break;
                     }
                     else
                     {
-                        Console.WriteLine("Input Kosong atau Invalid");
+                        Console.WriteLine("Input Invalid. Pilihan hanya (Y/N)");
                     }
 
                     countmaxInvalid++;
-                }
+                    if(countmaxInvalid >= 3)
+                    {
+                        onRun = false;
 
-                if (confirmAddingnewData.ToLower() == "y")
-                {
-                    continue;
-                }
-                else if (confirmAddingnewData.ToLower() == "n")
-                {
-                    onRun = false;
+                        Console.WriteLine("Kembali ke Menu Utama. Tekan Enter");
+                        Console.ReadLine();
+                        break;
+                    }
                 }
             } while (onRun);
         }
