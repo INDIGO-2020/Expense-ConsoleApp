@@ -118,21 +118,46 @@ namespace Expense_ConsoleApp
                 ShowDataCategories();
 
                 Console.Write("\nKetik Id Kategori: ");
-                while (!int.TryParse(Console.ReadLine(), out category) || !Enum.IsDefined(typeof(Model.Category), category))
+                while (!int.TryParse(Console.ReadLine(), out category) || !Enum.IsDefined(typeof(Model.Category), category) || countmaxInvalid >= 3)
                 {
+                    countmaxInvalid++;
+                    if (countmaxInvalid >= 3)
+                    {
+                        Console.WriteLine("Kembali ke Menu Utama. Tekan Enter");
+                        Console.ReadLine();
+                        return;
+                    }
+
                     Console.WriteLine("Id atau Kategori tersebut tidak terdaftar.");
                     Console.Write("Ketik Id Kategori: ");
+
                 }
 
                 Model.Category selectedCategory = (Model.Category)category;
                 //Console.WriteLine(selectedCategory);
 
                 Console.Write("Jumlah Pengeluaran: ");
-                while (!double.TryParse(Console.ReadLine(), out jumlah))
+
+                while (true)
                 {
-                    Console.WriteLine("Input Invalid. Hanya menerima Angka/Number");
-                    Console.Write("Jumlah Pengeluaran: ");
+                    if (!double.TryParse(Console.ReadLine(), out jumlah))
+                    {
+                        Console.WriteLine("Input Invalid. Hanya menerima Angka/Number");
+                        Console.Write("Jumlah Pengeluaran: ");
+                        continue;
+                    }
+                    else if (jumlah < 0)
+                    {
+                        Console.WriteLine("Pengeluaran Tidak bisa Negatif");
+                        Console.Write("Jumlah Pengeluaran: ");
+                    }
+                    else
+                    {
+                        break;
+                    }
+
                 }
+
 
                 Console.Write("Catatan tambahan(opsional): ");
                 catatan = Console.ReadLine();
@@ -204,9 +229,12 @@ namespace Expense_ConsoleApp
                     Console.Clear();
                     DisplayHeader(headerText);
 
+                    DateTime dateTime;
                     bool onRun = true;
                     int categoryEdited = 0;
                     double jumlah = 0;
+
+                    int countMaxinValid = 3;
                     while (onRun)
                     {
 
@@ -240,7 +268,7 @@ namespace Expense_ConsoleApp
                                         else
                                         {
                                             modifyExpense.expenseNotes = inputDeskripsi;
-                                            Console.Write("Data telah diperbaharui. Tekan Enter untuk refresh");
+                                            Console.Write("Deskripsi telah diperbaharui. Tekan Enter untuk refresh");
                                         }
 
 
@@ -268,7 +296,7 @@ namespace Expense_ConsoleApp
                                         else
                                         {
                                             modifyExpense.expenseCategory = (Model.Category)categoryEdited;
-                                            Console.Write("Data telah diperbaharui. Tekan Enter untuk refresh");
+                                            Console.Write("Kategori telah diperbaharui. Tekan Enter untuk refresh");
                                         }
 
                                         Console.ReadLine();
@@ -280,21 +308,32 @@ namespace Expense_ConsoleApp
 
                                     case 3:
                                         Console.Write("Masukkan Jumlah Pengeluaran Baru: ");
-                                        while (!double.TryParse(Console.ReadLine(), out jumlah))
-                                        {
-                                            Console.WriteLine("Input Invalid. Hanya menerima Angka/Number");
-                                            Console.Write("Jumlah Pengeluaran: ");
-                                        }
 
-                                        if (jumlah == modifyExpense.Amount)
+                                        while (true)
                                         {
-                                            Console.WriteLine("Tidak ada perubahan pada Jumlah Pengeluaran.");
+                                            if (!double.TryParse(Console.ReadLine(), out jumlah))
+                                            {
+                                                Console.WriteLine("Input Invalid. Hanya menerima Angka/Number");
+                                                Console.Write("Jumlah Pengeluaran: ");
+                                                continue;
+                                            }
+                                            else if (jumlah < 0)
+                                            {
+                                                Console.WriteLine("Pengeluaran Tidak bisa Negatif");
+                                                Console.Write("Jumlah Pengeluaran: ");
+                                            }
+                                            else if (jumlah == modifyExpense.Amount)
+                                            {
+                                                Console.WriteLine("Tidak ada perubahan pada Jumlah Pengeluaran.");
+                                                break;
+                                            }
+                                            else
+                                            {
+                                                modifyExpense.Amount = jumlah;
+                                                Console.Write("Jumlah Pengeluaran telah diperbaharui. Tekan Enter untuk refresh");
+                                                break;
+                                            }
 
-                                        }
-                                        else
-                                        {
-                                            modifyExpense.Amount = jumlah;
-                                            Console.Write("Data telah diperbaharui. Tekan Enter untuk refresh");
                                         }
 
 
@@ -311,18 +350,35 @@ namespace Expense_ConsoleApp
                                         Console.Write("Masukkan Tanggal baru atau Kosongkan untuk Set Tanggal ke Hari ini: ");
                                         string inputTanggalBaru = Console.ReadLine();
 
-                                        DateTime dateTime;
+                                        DateTime getTanggal = modifyExpense.Date;
 
                                         while (true)
                                         {
                                             if (string.IsNullOrEmpty(inputTanggalBaru))
                                             {
-                                                modifyExpense.Date = DateTime.Now;
+                                                if (getTanggal.Date == DateTime.Now.Date)
+                                                {
+                                                    Console.WriteLine("Tidak ada perubahan pada Tanggal");
+                                                }
+                                                else
+                                                {
+                                                    modifyExpense.Date = DateTime.Now;
+                                                    Console.WriteLine("Tanggal di Set Hari Ini");
+                                                }
+
                                                 break;
                                             }
                                             else if (DateTime.TryParseExact(inputTanggalBaru, "dd/MM/yyyy", null, DateTimeStyles.None, out dateTime))
                                             {
-                                                modifyExpense.Date = dateTime;
+                                                if (dateTime.Date == getTanggal.Date)
+                                                {
+                                                    Console.WriteLine("Tidak ada perubahan pada Tanggal");
+                                                }
+                                                else
+                                                {
+                                                    modifyExpense.Date = dateTime;
+                                                    Console.Write("Tanggal telah diperbaharui. Tekan Enter untuk refresh");
+                                                }
                                                 break;
 
                                             }
@@ -334,8 +390,6 @@ namespace Expense_ConsoleApp
 
                                             }
                                         }
-
-                                        Console.Write("Data telah diperbaharui. Tekan Enter untuk refresh");
 
                                         Console.ReadLine();
                                         Console.Clear();
@@ -379,6 +433,10 @@ namespace Expense_ConsoleApp
                 else
                 {
                     Console.WriteLine("Id tidak ditemukan");
+
+                    Console.ReadLine();
+                    Console.Clear();
+                    return;
                 }
             }
             else
@@ -400,7 +458,6 @@ namespace Expense_ConsoleApp
             {
                 var modifyExpense = modelExpense.FirstOrDefault(t => t.Id == deleteId);
                 Console.Clear();
-                DisplayHeader(headerText);
 
                 if (modifyExpense != null)
                 {
@@ -410,9 +467,11 @@ namespace Expense_ConsoleApp
                     {
                         try
                         {
+                            DisplayHeader(headerText);
+
                             ShowDatafromInputId(deleteId);
 
-                            Console.Write("Hapus Data? (Y/N): ");
+                            Console.Write("\nHapus Data? (Y/N): ");
                             string confirm = Console.ReadLine();
 
                             if (confirm.ToLower() == "y")
@@ -422,19 +481,19 @@ namespace Expense_ConsoleApp
                                 Console.ReadLine();
 
                                 Console.Clear();
-                                DisplayHeader(headerText);
-
-                                BriefDisplayExpenses();
                                 break;
                             }
                             else if (confirm.ToLower() == "n")
                             {
+                                Console.Clear();
                                 return;
                             }
                             else
                             {
                                 Console.Write("Input Invalid. ketik Y/N untuk konfirmasi");
+                                Console.ReadLine();
 
+                                Console.Clear();
                             }
                         }
                         catch (Exception ex)

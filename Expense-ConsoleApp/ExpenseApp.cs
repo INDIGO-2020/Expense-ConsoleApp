@@ -54,6 +54,12 @@ namespace Expense_ConsoleApp
 
                         break;
                     case 3:
+                        manage.DisplayExpenseList();
+
+                        Console.Write("\nPilih No. yang akan di Hapus: ");
+                        inputUser = Console.ReadLine();
+                        manage.DeleteExpense(inputUser);
+
                         break;
                     case 4:
                         manage.DisplayExpenseList();
