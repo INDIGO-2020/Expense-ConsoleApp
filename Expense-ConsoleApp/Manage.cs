@@ -1,4 +1,5 @@
 ﻿using System.Globalization;
+using System.Reflection.Metadata.Ecma335;
 
 namespace Expense_ConsoleApp
 {
@@ -54,9 +55,8 @@ namespace Expense_ConsoleApp
         private void ShowDataCategories()
         {
 
-            //Console.Clear();
-
-            Console.WriteLine($"{"ID",-3} | {"Daftar Kategori",-17} |");
+            Console.WriteLine(new string('-', 25));
+            Console.WriteLine($"{"ID",-3} | {"Nama Kategori",-17} |");
             Console.WriteLine(new string('-', 25));
             foreach (var categoryItems in Enum.GetValues(typeof(Model.Category)))
             {
@@ -69,6 +69,7 @@ namespace Expense_ConsoleApp
             var checkSpesifikasi = modelExpense.Where(t => t.Id == id).SingleOrDefault();
 
             //header
+            Console.WriteLine(new string('-', 74));
             Console.WriteLine($"{"Deskripsi Pengeluaran",-20} | {"Kategori Pengeluaran",-20} | {"Pengeluaran",-12} | {"Tanggal",-10} |");
             Console.WriteLine(new string('-', 74));
 
@@ -221,35 +222,39 @@ namespace Expense_ConsoleApp
         public void EditExpense(string inputId, int? opsiUser = null)
         {
             DateTime dateTime;
+
             bool onRun = true;
+            int countMaxinValid = 0;
+
             int categoryEdited = 0;
             double jumlah = 0;
 
-            int countMaxinValid = 0;
 
             while (onRun)
             {
 
                 if (string.IsNullOrWhiteSpace(inputId))
                 {
-                    Console.WriteLine("Input tidak boleh Kosong!");
+                    //Console.WriteLine("Input tidak boleh Kosong!");
 
-                    countMaxinValid++;
-                    if (countMaxinValid >= 3)
-                    {
-                        onRun = false;
-                        Console.WriteLine("Terlalu banyak Invalid Input, Kembali ke Menu Utama. Tekan Enter");
+                    //countMaxinValid++;
+                    //if (countMaxinValid >= 3)
+                    //{
+                    //    onRun = false;
+                    //    Console.WriteLine("Terlalu banyak Invalid Input, Kembali ke Menu Utama. Tekan Enter");
 
-                        Console.ReadLine();
-                        Console.Clear();
-                        break;
-                    }
-                    else
-                    {
-                        Console.Write("\nPilih No. yang akan di Edit: ");
-                        inputId = Console.ReadLine();
-                        continue;
-                    }
+                    //    Console.ReadLine();
+                    //    Console.Clear();
+                    //    break;
+                    //}
+                    //else
+                    //{
+                    //    Console.Write("\nPilih No. yang akan di Edit: ");
+                    //    inputId = Console.ReadLine();
+                    //    continue;
+                    //}
+
+                    return;
                 }
 
                 countMaxinValid = 0;
@@ -257,7 +262,7 @@ namespace Expense_ConsoleApp
                 if (!int.TryParse(inputId, out int idExpense))
                 {
                     Console.WriteLine("Invalid Input. Gunakan Angka");
-                    Console.Write("\nPilih No. yang akan di Edit: ");
+                    Console.Write("\nPilih No. yang akan di Edit atau (Kosongkan untuk Kembali): ");
                     inputId = Console.ReadLine();
 
                     continue;
@@ -282,9 +287,11 @@ namespace Expense_ConsoleApp
                                 "4. Edit Tanggal\n" +
                                 "0. Selesai\n\n");
 
+                            Console.Write("Tekan(0-6): ");
                             if (int.TryParse(Console.ReadKey(true).KeyChar.ToString(), out int inputUser))
                             {
                                 opsiUser = inputUser;
+                                Console.WriteLine();
 
                                 switch (opsiUser)
                                 {
@@ -449,7 +456,7 @@ namespace Expense_ConsoleApp
                             }
                             else
                             {
-                                Console.WriteLine("Input Invalid. Gunakan Angka");
+                                Console.Write("Input Invalid. Gunakan Angka. Tekan Enter untuk Refresh");
                                 Console.ReadLine();
                                 countMaxinValid++;
                                 if (countMaxinValid >= 3)
@@ -483,7 +490,7 @@ namespace Expense_ConsoleApp
                         }
                         else
                         {
-                            Console.Write("\nPilih No. yang akan di Edit: ");
+                            Console.Write("\nPilih No. yang akan di Edit atau (Kosongkan untuk Kembali): ");
                             inputId = Console.ReadLine();
                             continue;
                         }
@@ -496,26 +503,35 @@ namespace Expense_ConsoleApp
 
         public void DeleteExpense(string inputUser)
         {
+            bool onRun = true;
+            int countMaxinValid = 0;
 
-            if (string.IsNullOrEmpty(inputUser))
+            while (onRun)
             {
-                return;
-            }
-
-            if (int.TryParse(inputUser, out int deleteId))
-            {
-                var modifyExpense = modelExpense.FirstOrDefault(t => t.Id == deleteId);
-                Console.Clear();
-
-                if (modifyExpense != null)
+                if (string.IsNullOrEmpty(inputUser))
                 {
-                    bool onRun = true;
+                    return;
+                }
 
-                    while (onRun)
+                if (!int.TryParse(inputUser, out int deleteId))
+                {
+                    Console.WriteLine("Input invalid. Tidak sesuai ketentuan! Gunakan angka");
+
+                    Console.Write("\nPilih No. yang akan di Hapus atau (Kosongkan untuk Kembali): ");
+                    inputUser = Console.ReadLine();
+                }
+                else
+                {
+                    var modifyExpense = modelExpense.FirstOrDefault(t => t.Id == deleteId);
+
+
+                    if (modifyExpense != null)
                     {
+
+                        DisplayHeader(headerText);
+
                         try
                         {
-                            DisplayHeader(headerText);
 
                             ShowDatafromInputId(deleteId);
 
@@ -549,17 +565,32 @@ namespace Expense_ConsoleApp
                             Console.WriteLine(ex.Message);
                         }
                     }
+                    else
+                    {
+                        Console.WriteLine("Invalid Input atau Id tidak ditemukan");
+
+                        countMaxinValid++;
+                        if (countMaxinValid >= 3)
+                        {
+                            onRun = false;
+                            Console.WriteLine("Terlalu banyak Invalid Input, Kembali ke Menu Utama. Tekan Enter");
+
+                            Console.ReadLine();
+                            Console.Clear();
+                            break;
+                        }
+                        else
+                        {
+                            Console.Write("\nPilih No. yang akan di Hapus atau (Kosongkan untuk Kembali): ");
+                            inputUser = Console.ReadLine();
+                            continue;
+                        }
+                    }
                 }
-                else
-                {
-                    Console.WriteLine("Invalid Input atau Id tidak ditemukan");
-                }
-            }
-            else
-            {
-                Console.WriteLine("Input invalid. Tidak sesuai ketentuan! Gunakan angka");
+
             }
         }
+
         //TODO Display Expenses
         public void DisplayExpenseList()
         {
@@ -567,7 +598,9 @@ namespace Expense_ConsoleApp
             DisplayHeader(headerText);
 
             //header
-            Console.WriteLine($"{"ID",-5} | {"Deskripsi Pengeluaran",-25} | {"Kategori",-15} | {"Pengeluaran",-15} | {"Tanggal",-10} |");
+            Console.WriteLine("\t\t\t\tData Pengeluaran");
+            Console.WriteLine(new string('-', 84));
+            Console.WriteLine($"{"No",-5} | {"Deskripsi Pengeluaran",-25} | {"Kategori",-15} | {"Pengeluaran",-15} | {"Tanggal",-10} |");
             Console.WriteLine(new string('-', 84));
             foreach (var item in modelExpense)
             {

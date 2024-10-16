@@ -18,6 +18,7 @@ namespace Expense_ConsoleApp
 
         private void MenuApp()
         {
+
             Console.WriteLine(" 1. Tambah Expense");
             Console.WriteLine(" 2. Edit Expense");
             Console.WriteLine(" 3. Delete Expense");
@@ -33,6 +34,7 @@ namespace Expense_ConsoleApp
             {
                 manage.DisplayHeader(manage.headerText);
 
+                Console.WriteLine(new string(' ', 5) + "Menu Utama");
                 Console.WriteLine(new string('-', 20));
                 MenuApp();
                 Console.WriteLine(new string('-', 20));
@@ -59,7 +61,7 @@ namespace Expense_ConsoleApp
                     case 2:
                         manage.BriefDisplayExpenses();
 
-                        Console.Write("\nPilih No. yang akan di Edit: ");
+                        Console.Write("\nPilih No. yang akan di Edit atau (Kosongkan untuk Kembali): ");
                         inputUser = Console.ReadLine();
                         manage.EditExpense(inputUser);
 
