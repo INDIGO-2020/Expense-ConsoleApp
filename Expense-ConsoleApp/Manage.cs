@@ -37,17 +37,15 @@ namespace Expense_ConsoleApp
 
         public void BriefDisplayExpenses()
         {
-            Console.Clear();
-
             DisplayHeader(headerText);
-            Console.WriteLine($"{"No. ",-5} {"Tanggal",-12} {"Kategori Expense",-20} {"Jumlah Pengeluaran"}");
-            Console.WriteLine(new string('-', 58));
+            Console.WriteLine($"{"No. ",-2} | {"Tanggal",-12} | {"Kategori Expense",-17} | {"Jumlah Pengeluaran",-15} |");
+            Console.WriteLine(new string('-', 62));
 
             foreach (var briefSum in modelExpense)
             {
                 string callFormattedCurrency = FormatCurrency(briefSum.Amount);
 
-                Console.WriteLine($"{briefSum.Id,-5} {briefSum.Date.ToString("dd/MM/yyy"),-12} {briefSum.expenseCategory,-20} {callFormattedCurrency} ");
+                Console.WriteLine($"{briefSum.Id,-4} | {briefSum.Date.ToString("dd/MM/yyy"),-12} | {briefSum.expenseCategory,-17} | {callFormattedCurrency,-18} |");
 
             }
         }
@@ -55,11 +53,14 @@ namespace Expense_ConsoleApp
 
         private void ShowDataCategories()
         {
-            Console.WriteLine($"{"ID",-3} {"Daftar Kategori"}");
-            Console.WriteLine(new string('-', 17));
+
+            //Console.Clear();
+
+            Console.WriteLine($"{"ID",-3} | {"Daftar Kategori",-17} |");
+            Console.WriteLine(new string('-', 25));
             foreach (var categoryItems in Enum.GetValues(typeof(Model.Category)))
             {
-                Console.WriteLine($"{(int)categoryItems,-3} {categoryItems}");
+                Console.WriteLine($"{(int)categoryItems,-3} | {categoryItems,-17} |");
             }
         }
 
@@ -68,17 +69,19 @@ namespace Expense_ConsoleApp
             var checkSpesifikasi = modelExpense.Where(t => t.Id == id).SingleOrDefault();
 
             //header
-            Console.WriteLine($"{"Deskripsi Pengeluaran",-23} {"Kategori Pengeluaran",-20} {"Pengeluaran",-12} {"Tanggal",-15}");
-            Console.WriteLine(new string('-', 70));
+            Console.WriteLine($"{"Deskripsi Pengeluaran",-20} | {"Kategori Pengeluaran",-20} | {"Pengeluaran",-12} | {"Tanggal",-10} |");
+            Console.WriteLine(new string('-', 74));
 
             //call re-format currency
             string callFormattedCurrency = FormatCurrency(checkSpesifikasi.Amount);
 
-            Console.WriteLine($"{checkSpesifikasi.expenseNotes,-23} {checkSpesifikasi.expenseCategory,-20} {callFormattedCurrency,-12} {checkSpesifikasi.Date.ToString("dd/MM/yyy"),-15}");
+            Console.WriteLine($"{checkSpesifikasi.expenseNotes,-21} | {checkSpesifikasi.expenseCategory,-20} | {callFormattedCurrency,-12} | {checkSpesifikasi.Date.ToString("dd/MM/yyy"),-10} |");
         }
 
         public void DisplayHeader(string headerText)
         {
+            Console.Clear();
+
             int widthConsole = Console.WindowWidth;
             int textLength = headerText.Length;
             int totalPadding = (widthConsole - textLength) / 2;
@@ -96,6 +99,7 @@ namespace Expense_ConsoleApp
                 Console.WriteLine(headerText);
             }
         }
+
         #endregion
 
         #region TODO:
@@ -114,6 +118,9 @@ namespace Expense_ConsoleApp
 
             do
             {
+                DisplayHeader(headerText);
+
+                Console.WriteLine(new string(' ', 6) + "Tambah Expense\n");
                 Console.WriteLine("Pilih Kategori Pengeluaran: ");
                 ShowDataCategories();
 
@@ -123,7 +130,7 @@ namespace Expense_ConsoleApp
                     countmaxInvalid++;
                     if (countmaxInvalid >= 3)
                     {
-                        Console.WriteLine("Kembali ke Menu Utama. Tekan Enter");
+                        Console.WriteLine("Terlalu banyak Invalid Input, Kembali ke Menu Utama. Tekan Enter");
                         Console.ReadLine();
                         return;
                     }
@@ -202,7 +209,7 @@ namespace Expense_ConsoleApp
                     {
                         onRun = false;
 
-                        Console.WriteLine("Kembali ke Menu Utama. Tekan Enter");
+                        Console.WriteLine("Terlalu banyak Invalid Input, Kembali ke Menu Utama. Tekan Enter");
                         Console.ReadLine();
                         break;
                     }
@@ -213,30 +220,56 @@ namespace Expense_ConsoleApp
         //TODO Edit Expense
         public void EditExpense(string inputId, int? opsiUser = null)
         {
+            DateTime dateTime;
+            bool onRun = true;
+            int categoryEdited = 0;
+            double jumlah = 0;
 
-            if (string.IsNullOrWhiteSpace(inputId))
+            int countMaxinValid = 0;
+
+            while (onRun)
             {
-                Console.WriteLine("Input tidak boleh Kosong!");
-            }
 
-
-            if (int.TryParse(inputId, out int idExpense))
-            {
-                var modifyExpense = modelExpense.FirstOrDefault(t => t.Id == idExpense);
-
-                if (modifyExpense != null)
+                if (string.IsNullOrWhiteSpace(inputId))
                 {
-                    Console.Clear();
-                    DisplayHeader(headerText);
+                    Console.WriteLine("Input tidak boleh Kosong!");
 
-                    DateTime dateTime;
-                    bool onRun = true;
-                    int categoryEdited = 0;
-                    double jumlah = 0;
-
-                    int countMaxinValid = 3;
-                    while (onRun)
+                    countMaxinValid++;
+                    if (countMaxinValid >= 3)
                     {
+                        onRun = false;
+                        Console.WriteLine("Terlalu banyak Invalid Input, Kembali ke Menu Utama. Tekan Enter");
+
+                        Console.ReadLine();
+                        Console.Clear();
+                        break;
+                    }
+                    else
+                    {
+                        Console.Write("\nPilih No. yang akan di Edit: ");
+                        inputId = Console.ReadLine();
+                        continue;
+                    }
+                }
+
+                countMaxinValid = 0;
+
+                if (!int.TryParse(inputId, out int idExpense))
+                {
+                    Console.WriteLine("Invalid Input. Gunakan Angka");
+                    Console.Write("\nPilih No. yang akan di Edit: ");
+                    inputId = Console.ReadLine();
+
+                    continue;
+                }
+                else
+                {
+                    var modifyExpense = modelExpense.FirstOrDefault(t => t.Id == idExpense);
+
+                    if (modifyExpense != null)
+                    {
+                        DisplayHeader(headerText);
+
 
                         try
                         {
@@ -273,7 +306,7 @@ namespace Expense_ConsoleApp
 
 
                                         Console.ReadLine();
-                                        Console.Clear();
+
                                         DisplayHeader(headerText);
 
                                         break;
@@ -300,7 +333,7 @@ namespace Expense_ConsoleApp
                                         }
 
                                         Console.ReadLine();
-                                        Console.Clear();
+
                                         DisplayHeader(headerText);
 
                                         break;
@@ -338,7 +371,7 @@ namespace Expense_ConsoleApp
 
 
                                         Console.ReadLine();
-                                        Console.Clear();
+
                                         DisplayHeader(headerText);
 
                                         break;
@@ -392,7 +425,7 @@ namespace Expense_ConsoleApp
                                         }
 
                                         Console.ReadLine();
-                                        Console.Clear();
+
                                         DisplayHeader(headerText);
 
                                         break;
@@ -405,10 +438,10 @@ namespace Expense_ConsoleApp
 
 
                                     default:
-                                        Console.WriteLine("Invalid Input atau Opsi tidak tersedia");
+                                        Console.Write("Opsi tidak tersedia. Tekan Enter untuk Refresh");
 
                                         Console.ReadLine();
-                                        Console.Clear();
+
                                         DisplayHeader(headerText);
 
                                         break;
@@ -418,8 +451,13 @@ namespace Expense_ConsoleApp
                             {
                                 Console.WriteLine("Input Invalid. Gunakan Angka");
                                 Console.ReadLine();
+                                countMaxinValid++;
+                                if (countMaxinValid >= 3)
+                                {
+                                    Console.WriteLine("Terlalu banyak Invalid Input, Kembali ke Menu Utama. Tekan Enter");
+                                    break;
+                                }
 
-                                Console.Clear();
                                 DisplayHeader(headerText);
 
                             }
@@ -429,19 +467,30 @@ namespace Expense_ConsoleApp
                             Console.WriteLine(ex.Message);
                         }
                     }
-                }
-                else
-                {
-                    Console.WriteLine("Id tidak ditemukan");
+                    else
+                    {
+                        Console.WriteLine("Id tidak ditemukan");
 
-                    Console.ReadLine();
-                    Console.Clear();
-                    return;
+                        countMaxinValid++;
+                        if (countMaxinValid >= 3)
+                        {
+                            onRun = false;
+                            Console.WriteLine("Terlalu banyak Invalid Input, Kembali ke Menu Utama. Tekan Enter");
+
+                            Console.ReadLine();
+                            Console.Clear();
+                            break;
+                        }
+                        else
+                        {
+                            Console.Write("\nPilih No. yang akan di Edit: ");
+                            inputId = Console.ReadLine();
+                            continue;
+                        }
+                    }
                 }
-            }
-            else
-            {
-                Console.WriteLine("Input invalid. Tidak sesuai ketentuan! Gunakan angka");
+
+
             }
         }
 
@@ -450,7 +499,6 @@ namespace Expense_ConsoleApp
 
             if (string.IsNullOrEmpty(inputUser))
             {
-                Console.WriteLine("Input tidak boleh Kosong!");
                 return;
             }
 
@@ -515,14 +563,17 @@ namespace Expense_ConsoleApp
         //TODO Display Expenses
         public void DisplayExpenseList()
         {
+
+            DisplayHeader(headerText);
+
             //header
-            Console.WriteLine($"{"ID",-5} {"Deskripsi Pengeluaran",-25} {"Kategori",-15} {"Pengeluaran",-15} {"Tanggal",-15}");
-            Console.WriteLine(new string('-', 80));
+            Console.WriteLine($"{"ID",-5} | {"Deskripsi Pengeluaran",-25} | {"Kategori",-15} | {"Pengeluaran",-15} | {"Tanggal",-10} |");
+            Console.WriteLine(new string('-', 84));
             foreach (var item in modelExpense)
             {
                 //call re-format currency
                 string callFormattedCurrency = FormatCurrency(item.Amount);
-                Console.WriteLine($"{item.Id,-5} {item.expenseNotes,-25} {item.expenseCategory,-15} {callFormattedCurrency,-15} {item.Date.ToString("dd/MM/yyy"),-15}");
+                Console.WriteLine($"{item.Id,-5} | {item.expenseNotes,-25} | {item.expenseCategory,-15} | {callFormattedCurrency,-15} | {item.Date.ToString("dd/MM/yyy"),-10} |");
             }
         }
         #endregion

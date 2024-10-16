@@ -18,7 +18,11 @@ namespace Expense_ConsoleApp
 
         private void MenuApp()
         {
-
+            Console.WriteLine(" 1. Tambah Expense");
+            Console.WriteLine(" 2. Edit Expense");
+            Console.WriteLine(" 3. Delete Expense");
+            Console.WriteLine(" 4. Display Expense");
+            Console.WriteLine(" 0. Keluar");
         }
 
         public void Execute()
@@ -28,6 +32,10 @@ namespace Expense_ConsoleApp
             do
             {
                 manage.DisplayHeader(manage.headerText);
+
+                Console.WriteLine(new string('-', 20));
+                MenuApp();
+                Console.WriteLine(new string('-', 20));
 
                 Console.Write("Pilih 1-4: ");
 
@@ -41,6 +49,9 @@ namespace Expense_ConsoleApp
                 switch (option)
                 {
                     case 1:
+                        Console.WriteLine(new string('-', 20));
+                        Console.WriteLine();
+
                         manage.AddExpense();
 
                         Console.Clear();
@@ -56,7 +67,7 @@ namespace Expense_ConsoleApp
                     case 3:
                         manage.DisplayExpenseList();
 
-                        Console.Write("\nPilih No. yang akan di Hapus: ");
+                        Console.Write("\nPilih No. yang akan di Hapus atau (Kosongkan untuk Kembali): ");
                         inputUser = Console.ReadLine();
                         manage.DeleteExpense(inputUser);
 
