@@ -144,7 +144,7 @@ namespace Expense_ConsoleApp
                 Model.Category selectedCategory = (Model.Category)category;
                 //Console.WriteLine(selectedCategory);
 
-                Console.Write("Jumlah Pengeluaran: ");
+                Console.Write("Jumlah Pengeluaran(Rp.): ");
 
                 while (true)
                 {
@@ -262,7 +262,7 @@ namespace Expense_ConsoleApp
                 if (!int.TryParse(inputId, out int idExpense))
                 {
                     Console.WriteLine("Invalid Input. Gunakan Angka");
-                    Console.Write("\nPilih No. yang akan di Edit atau (Kosongkan untuk Kembali): ");
+                    Console.Write("\nPilih No. yang akan di Edit atau Tekan Enter (Kosongkan untuk Kembali): ");
                     inputId = Console.ReadLine();
 
                     continue;
@@ -490,7 +490,7 @@ namespace Expense_ConsoleApp
                         }
                         else
                         {
-                            Console.Write("\nPilih No. yang akan di Edit atau (Kosongkan untuk Kembali): ");
+                            Console.Write("\nPilih No. yang akan di Edit atau Tekan Enter (Kosongkan untuk Kembali): ");
                             inputId = Console.ReadLine();
                             continue;
                         }
@@ -517,7 +517,7 @@ namespace Expense_ConsoleApp
                 {
                     Console.WriteLine("Input invalid. Tidak sesuai ketentuan! Gunakan angka");
 
-                    Console.Write("\nPilih No. yang akan di Hapus atau (Kosongkan untuk Kembali): ");
+                    Console.Write("\nPilih No. yang akan di Hapus atau Tekan Enter(Kosongkan untuk Kembali): ");
                     inputUser = Console.ReadLine();
                 }
                 else
@@ -581,7 +581,7 @@ namespace Expense_ConsoleApp
                         }
                         else
                         {
-                            Console.Write("\nPilih No. yang akan di Hapus atau (Kosongkan untuk Kembali): ");
+                            Console.Write("\nPilih No. yang akan di Hapus atau Tekan Enter (Kosongkan untuk Kembali): ");
                             inputUser = Console.ReadLine();
                             continue;
                         }

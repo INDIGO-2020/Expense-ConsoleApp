@@ -61,7 +61,7 @@ namespace Expense_ConsoleApp
                     case 2:
                         manage.BriefDisplayExpenses();
 
-                        Console.Write("\nPilih No. yang akan di Edit atau (Kosongkan untuk Kembali): ");
+                        Console.Write("\nPilih No. yang akan di Edit atau Tekan Enter (Kosongkan untuk Kembali): ");
                         inputUser = Console.ReadLine();
                         manage.EditExpense(inputUser);
 
@@ -69,7 +69,7 @@ namespace Expense_ConsoleApp
                     case 3:
                         manage.DisplayExpenseList();
 
-                        Console.Write("\nPilih No. yang akan di Hapus atau (Kosongkan untuk Kembali): ");
+                        Console.Write("\nPilih No. yang akan di Hapus atau Tekan Enter (Kosongkan untuk Kembali): ");
                         inputUser = Console.ReadLine();
                         manage.DeleteExpense(inputUser);
 
